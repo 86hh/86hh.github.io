@@ -1,0 +1,91 @@
+
+
+body {
+	background-color: #565864;
+	font-family: Consolas, monaco, monospace;
+	font-size: 10px;
+	color: #ffffff;
+}
+
+h1 {
+	font-size: 16px;
+	color: #979A9F
+}
+
+h2 {
+	text-align: center;
+	font-size: 24px;
+	margin-bottom: 2px;
+}
+
+a:link {
+	color: #ffffff;
+}
+
+a:visited {
+	color: #ffffff;
+}
+
+a.gafftag {
+	color: #000000;
+	background-color: rgb(25, 211, 57);
+	font-weight: bold;
+	text-decoration: none;
+	line-height:14px;
+}
+
+div.center-txt {
+	text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #EB6705;
+  font-size: 10px;
+  text-align: left;
+  padding: 5px;
+}
+
+th {
+  background-color: #EB6705;
+}
+
+p.description {
+	text-align: justify;
+	
+}
+
+#main-container {
+	width: 750px;
+    margin: auto;
+	text-align: center;
+}
+
+/* Navigation bar */
+
+#navibar {
+	background-color: #EB6705;
+	margin-top: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}	
+
+#navibar a {
+	text-decoration: none;
+	font-weight: bold;
+}
+
+table.center {
+	width: 400px;
+	margin-top: 20px;
+	margin-left:auto; 
+    margin-right:auto;
+}
+	
+
+
+

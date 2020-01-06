@@ -1,0 +1,18 @@
+
+
+body {
+	background-image: url("bg.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom center; 
+	background-color: #000000;
+	font-family: Consolas, monaco, monospace;
+	font-size: 11px;
+	color: #ffffff
+}
+
+.main-container-articles {
+	margin-top: 30px;
+	margin-left: 20px;
+	width: 800px
+}
